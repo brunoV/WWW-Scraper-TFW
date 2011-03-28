@@ -1,0 +1,56 @@
+#!/usr/bin/env perl
+use v5.12;
+use warnings;
+
+package tfw;
+
+use Getopt::Long::Descriptive;
+
+my ($opt, $usage) = describe_options(
+    "tfw %o",
+    [ "config=s",   "ini-style configuration file", { default => $ENV{HOME} . '/.tfwrc' } ],
+    [ "Celsius|C",  "display temperature in Celsius" ],
+    [ "city|c=s",   "city name or zipcode"           ],
+    [ "forecast|f", "display forecast"               ],
+    [ "help|h|?",   "display help"                   ],
+);
+
+print $usage->text and exit if $opt->help;
+
+if ( -f $opt->config ) {
+    require Config::INI::Reader;
+
+    my $config = Config::INI::Reader->read_file( $opt->config )
+        or die "Couldn't read configuration file " . $opt->config . "\n";
+
+    foreach my $key (keys %{ $config->{_} }) {
+        $opt->{$key} = $config->{_}{$key} unless defined $opt->{$key};
+    }
+}
+
+die "Required option missing: city\n" unless $opt->city;
+
+require  WWW::Scraper::TFW;
+
+my $tfw = WWW::Scraper::TFW->new( city => $opt->city, celsius => $opt->celsius );
+
+say $tfw->temperature;
+say $tfw->remark;
+
+say "\n" . format_forecast( $tfw->forecast ) if $opt->forecast;
+
+sub format_forecast {
+    my $forecast = shift;
+
+    require Text::Table;
+
+    my @columns = qw(day high low weather);
+
+    my $table = Text::Table->new(@columns);
+
+    $table->load( map { [ @{$_}{@columns} ] } @$forecast );
+
+    return "$table";
+}
+
+1;

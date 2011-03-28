@@ -1,0 +1,14 @@
+*.swp
+*.swo
+*.tmp
+*.bak
+./blib/
+pm_to_blib
+cover_db
+*.gz
+nytprof/
+.prove
+.build
+*.eps
+etc/
+WWW-Scraper-*/
