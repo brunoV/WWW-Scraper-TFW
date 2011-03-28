@@ -18,20 +18,17 @@ my ($opt, $usage) = describe_options(
 print $usage->text and exit if $opt->help;
 
 if ( -f $opt->config ) {
-    require Config::INI::Reader;
 
-    my $config = Config::INI::Reader->read_file( $opt->config )
-        or die "Couldn't read configuration file " . $opt->config . "\n";
+    my $config = read_config( $opt->config );
 
-    foreach my $key (keys %{ $config->{_} }) {
-        $opt->{$key} = $config->{_}{$key} unless defined $opt->{$key};
+    foreach my $key (keys %$config) {
+        $opt->{$key} = $config->{$key} unless defined $opt->{$key};
     }
 }
 
 die "Required option missing: city\n" unless $opt->city;
 
 require  WWW::Scraper::TFW;
-
 my $tfw = WWW::Scraper::TFW->new( city => $opt->city, celsius => $opt->celsius );
 
 say $tfw->temperature;
@@ -51,6 +48,18 @@ sub format_forecast {
     $table->load( map { [ @{$_}{@columns} ] } @$forecast );
 
     return $table;
+}
+
+sub read_config {
+    my $file = shift;
+
+    require Config::INI::Reader;
+
+    my $config = Config::INI::Reader->read_file( $opt->config )
+      or die "Couldn't read configuration file " . $opt->config . "\n";
+
+    # Only use main section of ini file
+    return $config->{_};
 }
 
 1;
