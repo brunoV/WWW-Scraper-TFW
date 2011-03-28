@@ -17,8 +17,7 @@ has _base_url => (
     is      => 'ro',
     default => sub { URI->new('http://www.thefuckingweather.com') }
 );
-
-has _url => ( is => 'ro', lazy => 1, builder => '_build_url' );
+has _url      => ( is => 'ro', lazy => 1, builder => '_build_url' );
 has _response => ( is => 'ro', lazy => 1, builder => '_build_response' );
 
 has temperature => ( is => 'ro', lazy => 1, builder => '_build_temperature' );
