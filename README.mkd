@@ -26,7 +26,7 @@ Perl bindings for thefuckingweather.com
     Enjoy.
 
 You can save your preferences in an ini-style configuration file. In
-$HOME/.tfwrc:
+`$HOME/.tfwrc`:
 
     city     = La Plata
     Celsius  = fuck yes ; this will be evaluated in boolean context
