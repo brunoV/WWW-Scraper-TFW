@@ -117,4 +117,79 @@ sub _assemble_forecast {
     return \@forecast;
 }
 
+=head1 SYNOPSIS
+
+    use WWW::Scraper::TFW;
+    my $tfw = WWW::Scraper::TFW->new( city => 'La Plata', celsius => 1 );
+
+    say $tfw->temperature;
+    # 20º?! ITS FUCKING NICE!
+
+    say $tfw->remark;
+    # Enjoy.
+
+    # Tomorrow's high
+    say $tfw->forecast->[0]{high}
+    # 22
+
+=cut
+
+=head1 DESCRIPTION
+
+This module scrapes L<thefuckingweather.com> with your preferred
+city/zipcode and makes the weather information (along with some colorful
+comments) available to you.
+
+=cut
+
+=attr city
+
+The name of the city or zipcode whose weather you want to find out
+about. You'll be insulted if either are incorrect.
+
+This attribute is required at construction time and is read only.
+
+=cut
+
+=attr celsius
+
+Set this attribute to true at construction time to have the temperature
+in celsius degrees. Defaults to false.
+
+=cut
+
+=attr temperature
+
+The current temperature of the specified location.
+
+=cut
+
+=attr remark
+
+A remark on the current weather.
+
+=cut
+
+=attr forecast
+
+Forecast for the following two days. Returns an array reference that
+typically looks like:
+
+    [
+      {
+        day     => 'Mon',
+        high    => 22,
+        low     => 13,
+        weather => 'Clear',
+      },
+      {
+        day     => 'Tue',
+        high    => 24,
+        low     => 13,
+        weather => 'Sunny',
+      }
+    ];
+
+=cut
+
 1;

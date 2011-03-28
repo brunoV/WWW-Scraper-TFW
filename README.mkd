@@ -1,0 +1,43 @@
+WWW::Scraper::TFW
+=================
+
+Perl bindings for thefuckingweather.com
+---------------------------------------
+
+### SYNOPSIS
+
+    use WWW::Scraper::TFW;
+    my $tfw = WWW::Scraper::TFW->new( city => 'La Plata', celsius => 1 );
+
+    say $tfw->temperature;
+    # 20º?! ITS FUCKING NICE!
+
+    say $tfw->remark;
+    # Enjoy.
+
+    # Tomorrow's high
+    say $tfw->forecast->[0]{high}
+    # 22
+
+### Command line app
+
+    ~$ tfw -c 'La Plata'
+    20º?! ITS FUCKING NICE!
+    Enjoy.
+
+You can save your preferences in an ini-style configuration file. In
+$HOME/.tfwrc:
+
+    city     = La Plata
+    Celsius  = fuck yes ; this will be evaluated in boolean context
+    forecast = yes
+
+And then you can just do:
+
+    ~$ tfw
+    21º?! ITS FUCKING NICE!
+    uh, can we trade?
+
+    day high low weather
+    Mon 22   13  Clear
+    Tue 24   13  Sunny

@@ -2,7 +2,10 @@
 use v5.12;
 use warnings;
 
-package tfw;
+# ABSTRACT: Command line app for thefuckingweather.com
+
+package
+    tfw;
 
 use Getopt::Long::Descriptive;
 
@@ -61,5 +64,49 @@ sub read_config {
     # Only use main section of ini file
     return $config->{_};
 }
+
+=head1 DESCRIPTION
+
+This is a command line wrapper around L<WWW::Scraper::TFW>. It outputs
+weather information from L<thefuckingweather.com>.
+
+=cut
+
+=head1 SYNOPSIS
+
+    ~$ tfw -c 'La Plata'
+    20º?! ITS FUCKING NICE!
+    Enjoy.
+
+You can save your preferences in an ini-style configuration file. In
+$HOME/.tfwrc:
+
+    city     = La Plata
+
+    ; These will be evaluated in boolean context
+    Celsius  = fuck yes
+    forecast = yes
+
+And then you can just do:
+
+    ~$ tfw
+    21º?! ITS FUCKING NICE!
+    uh, can we trade?
+
+    day high low weather
+    Mon 22   13  Clear
+    Tue 24   13  Sunny
+
+=cut
+
+=head1 OPTIONS
+
+    --config        ini-style configuration file
+    -C --Celsius    display temperature in Celsius
+    -c --city       city name or zipcode
+    -f --forecast   display forecast
+    -? -h --help    display help
+
+=cut
 
 1;
