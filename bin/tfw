@@ -50,7 +50,7 @@ sub format_forecast {
 
     $table->load( map { [ @{$_}{@columns} ] } @$forecast );
 
-    return "$table";
+    return $table;
 }
 
 1;
