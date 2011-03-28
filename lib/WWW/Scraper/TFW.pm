@@ -98,10 +98,12 @@ sub _assemble_forecast {
 
     my @forecast;
 
-    my @days     = @{ (shift @{$result->{rows}})->{columns} }[1..2];
-    my @high     = @{ (shift @{$result->{rows}})->{columns} }[1..2];
-    my @low      = @{ (shift @{$result->{rows}})->{columns} }[1..2];
-    my @weather  = @{ (shift @{$result->{rows}})->{columns} }[1..2];
+    my @rows = @{ $result->{rows} };
+
+    my @days     = @{ (shift @rows)->{columns} }[1..2];
+    my @high     = @{ (shift @rows)->{columns} }[1..2];
+    my @low      = @{ (shift @rows)->{columns} }[1..2];
+    my @weather  = @{ (shift @rows)->{columns} }[1..2];
 
     for my $i (0..1) {
         push @forecast,
