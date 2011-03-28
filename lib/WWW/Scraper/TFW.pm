@@ -95,22 +95,18 @@ sub _build_forecast {
 sub _assemble_forecast {
     my $result = shift;
 
-    my @forecast;
-
     my @rows = @{ $result->{rows} };
 
-    my @days     = @{ (shift @rows)->{columns} }[1..2];
-    my @high     = @{ (shift @rows)->{columns} }[1..2];
-    my @low      = @{ (shift @rows)->{columns} }[1..2];
-    my @weather  = @{ (shift @rows)->{columns} }[1..2];
+    my ($days, $high, $low, $weather) = map { $_->{columns} } @rows;
 
-    for my $i (0..1) {
+    my @forecast;
+    for my $i (1..2) {
         push @forecast,
           {
-            day      => $days[$i],
-            high     => $high[$i],
-            low      => $low[$i],
-            weather  => $weather[$i]
+            day      => $days->[$i],
+            high     => $high->[$i],
+            low      => $low->[$i],
+            weather  => $weather->[$i]
           };
     }
 
