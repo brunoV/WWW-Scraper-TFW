@@ -21,7 +21,7 @@ Perl bindings for thefuckingweather.com
 
 ### Command line app
 
-    ~$ tfw -c 'La Plata'
+    ~$ tfw La Plata
     20º?! ITS FUCKING NICE!
     Enjoy.
 

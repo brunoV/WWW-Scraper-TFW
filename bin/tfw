@@ -12,29 +12,32 @@ package
 use Getopt::Long::Descriptive;
 
 my ($opt, $usage) = describe_options(
-    "tfw %o",
+    "tfw %o <city/zipcode>",
     [ "config=s",   "ini-style configuration file", { default => $ENV{HOME} . '/.tfwrc' } ],
     [ "Celsius|C",  "display temperature in Celsius" ],
-    [ "city|c=s",   "city name or zipcode"           ],
     [ "forecast|f", "display forecast"               ],
     [ "help|h|?",   "display help"                   ],
 );
 
 print $usage->text and exit if $opt->help;
 
+my $city = join ' ', @ARGV;
+
 if ( -f $opt->config ) {
 
     my $config = read_config( $opt->config );
+
+    $city = delete $config->{city} if defined $config->{city};
 
     foreach my $key (keys %$config) {
         $opt->{$key} = $config->{$key} unless defined $opt->{$key};
     }
 }
 
-die "Required option missing: city\n" unless $opt->city;
+die "Required option missing: city\n" unless $city;
 
 require  WWW::Scraper::TFW;
-my $tfw = WWW::Scraper::TFW->new( city => $opt->city, celsius => $opt->celsius );
+my $tfw = WWW::Scraper::TFW->new( city => $city, celsius => $opt->celsius );
 
 say $tfw->temperature;
 say $tfw->remark;
@@ -76,14 +79,14 @@ weather information from L<thefuckingweather.com>.
 
 =head1 SYNOPSIS
 
-    ~$ tfw -c 'La Plata'
+    ~$ tfw La Plata
     20º?! ITS FUCKING NICE!
     Enjoy.
 
 You can save your preferences in an ini-style configuration file. In
 $HOME/.tfwrc:
 
-    city     = La Plata
+    city = La Plata
 
     ; These will be evaluated in boolean context
     Celsius  = fuck yes
@@ -103,9 +106,10 @@ And then you can just do:
 
 =head1 OPTIONS
 
+    tfw [-?Cfh] [long options...] <city/zipcode>
+
     --config        ini-style configuration file
     -C --Celsius    display temperature in Celsius
-    -c --city       city name or zipcode
     -f --forecast   display forecast
     -? -h --help    display help
 
