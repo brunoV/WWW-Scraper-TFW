@@ -12,11 +12,6 @@ use URI;
 has city    => ( is => 'ro', required => 1);
 has celsius => ( is => 'ro', default => sub { 0 } );
 
-has _ua => ( is => 'ro', default => sub { LWP::UserAgent->new; } );
-has _base_url => (
-    is      => 'ro',
-    default => sub { URI->new('http://www.thefuckingweather.com') }
-);
 has _url      => ( is => 'ro', lazy => 1, builder => '_build_url' );
 has _response => ( is => 'ro', lazy => 1, builder => '_build_response' );
 
@@ -27,7 +22,7 @@ has forecast    => ( is => 'ro', lazy => 1, builder => '_build_forecast' );
 sub _build_url {
     my $self = shift;
 
-    my $uri     = $self->_base_url->clone;
+    my $uri     = URI->new('http://www.thefuckingweather.com');
     my $celsius = $self->celsius ? 'yes' : 'no';
 
     $uri->query_form( zipcode => $self->city, CELSIUS => $celsius );
@@ -38,7 +33,7 @@ sub _build_url {
 sub _build_response {
     my $self = shift;
 
-    my $response = $self->_ua->get( $self->_url )->as_string;
+    my $response = LWP::UserAgent->new->get( $self->_url )->as_string;
 
     $response or die "No response from " . $self->_url . "\n";
 
