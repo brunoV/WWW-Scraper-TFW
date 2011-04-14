@@ -48,6 +48,8 @@ sub _build_temperature {
 
     my $temp = $s->scrape( $self->_response );
 
+    die "No response!\n" unless defined $temp->{text};
+
     # Space between ?! and 'ITS...'
     $temp->{text} =~ s/\!/\! /;
 
