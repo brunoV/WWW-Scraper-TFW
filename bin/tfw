@@ -21,7 +21,7 @@ my ($opt, $usage) = describe_options(
 
 print $usage->text and exit if $opt->help;
 
-my $city = join ' ', @ARGV;
+my $city;
 
 if ( -f $opt->config ) {
 
@@ -33,6 +33,8 @@ if ( -f $opt->config ) {
         $opt->{$key} = $config->{$key} unless defined $opt->{$key};
     }
 }
+
+$city = join ' ', @ARGV if @ARGV;
 
 die "Required option missing: city\n" unless $city;
 
