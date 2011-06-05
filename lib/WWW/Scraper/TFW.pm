@@ -82,7 +82,7 @@ sub _build_forecast {
 
     my $result = $s->scrape( $self->_response );
 
-    die "Error parsing the forecast\n" unless $result and @{$result->{rows}} == 4;
+    die "Error parsing the forecast\n" unless %$result and @{$result->{rows}} == 4;
 
     my $forecast = _assemble_forecast( $result );
 
